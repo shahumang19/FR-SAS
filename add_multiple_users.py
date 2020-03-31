@@ -17,10 +17,10 @@ try:
         source = os.path.join(BASE_DIR, user)
         dest = os.path.join(OUTPUT_DIR, user)
         backup = os.path.join(BACKUP_DIR, user)
-        print(f"[INFO] User under process : {user}")
+        print(f"[INFO] [add_multiple_users.py] User under process : {user}")
 
         if os.path.exists(dest):
-            print(f"[WARNING] {user} already exists...")
+            print(f"[WARNING] [add_multiple_users.py] {user} already exists...")
         else:
             os.mkdir(dest)
             files = os.listdir(source)
@@ -38,12 +38,12 @@ try:
                                 cv2.imwrite(os.path.join(dest, f"{ix}_{file}"), aface)
                             del augmentedFaces, face
                         else:
-                            print(f"[ERROR] No faces found : {source_file}")
+                            print(f"[ERROR] [add_multiple_users.py] No faces found : {source_file}")
                         del img
                     else:
-                        print(f"[ERROR] {source_file} not an image...")
+                        print(f"[ERROR] [add_multiple_users.py] {source_file} not an image...")
                 shutil.move(source, backup)
             else:
-                print(f"[WARNING] {user} has no images...")
+                print(f"[WARNING] [add_multiple_users.py] {user} has no images...")
 except Exception as e:
     print(f"[ERROR] Exception ocurred [add_multiple_users.py] : {e}")

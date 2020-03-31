@@ -1,4 +1,5 @@
 import datetime 
+import pickle
 import cv2, numpy as np
 from os import listdir
 from os.path import isfile, isdir, join
@@ -12,10 +13,8 @@ def write_data(data,name):
     name : name of the pickle file
     """
     try:
-        head = "Time \t\t\t -\t Probability \n"
-        with open(name, "w") as fi:
-            fi.write(head)
-            fi.writelines(data)
+        with open(name, "wb") as fi:
+            pickle.dump(data, fi)
         print(f"[INFO] File Written : {name}")
     except Exception as e:
         print(f"[ERROR] write_data : {e}")
@@ -27,8 +26,8 @@ def read_data(name):
     name : name of the pickle file
     """
     try:
-        with open(name, "r") as fi:
-            data = fi.readline()
+        with open(name, "rb") as fi:
+            data = pickle.load(fi)
             return data
     except Exception as e:
         print(f"[ERROR] read_data :  {e}")
