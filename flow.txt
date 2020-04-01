@@ -3,3 +3,4 @@
 3) Detection on multiple camera
 4) Adding time stamp functionality
 5) Integration with sql for attendance marking
+6) Add delete user functionality
