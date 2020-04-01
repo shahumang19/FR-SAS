@@ -3,9 +3,7 @@ from Facenet import Facenet
 import utils as u
 import cv2, numpy as np
 import os
-import warnings
-
-warnings.filterwarnings("ignore")
+import imutils
 
 SOURCE_CAM = 0
 DEFAULT_THRESH = 0.75
@@ -34,7 +32,8 @@ facenet = Facenet()
 
 
 count_frames, skip_frames = 0, 15
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture("temp\\1.MOV")
 
 try:
     while True:
@@ -57,7 +56,7 @@ try:
 
                 frame = u.draw_predictions(frame, face_locations, predictions)
 
-
+            frame = imutils.resize(frame, width=min(1024, frame.shape[1]))
             cv2.imshow("Live Face Detection", frame)
             count_frames += skip_frames # i.e. at 30 fps, this advances one second
             cap.set(1, count_frames)
