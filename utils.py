@@ -1,6 +1,5 @@
-import datetime 
-import pickle
 import cv2, numpy as np
+import pickle
 from os import listdir
 from os.path import isfile, isdir, join
 from annoy import AnnoyIndex
@@ -15,7 +14,6 @@ def write_data(data,name):
     try:
         with open(name, "wb") as fi:
             pickle.dump(data, fi)
-        print(f"[INFO] File Written : {name}")
     except Exception as e:
         print(f"[ERROR] write_data : {e}")
 
@@ -31,6 +29,23 @@ def read_data(name):
             return data
     except Exception as e:
         print(f"[ERROR] read_data :  {e}")
+        
+
+
+def get_labels(path="data/labels.pkl"):
+    """
+    read data from pickle file
+    """
+    labels = read_data(path)
+    return labels
+    
+
+
+def get_features(path="data/features.pkl"):
+    """
+    read features from pickle file
+    """
+    return read_data(path)
 
 
 def get_data(dir_path):
@@ -67,6 +82,83 @@ def load_images(dir_path):
     
     return images
 
+
+def generate_annoyIndex(xp, name, trees=10):
+    """
+    Generates annoy index for given numpy array and saves the file on disk
+    xp : (?,128) dimensional feature array
+    name : name of the file
+    trees : number of trees for annoy index (more trees more accuracy) default is 10.
+    """
+    try:
+        f = 128
+        start = time()
+
+        t = AnnoyIndex(f, 'euclidean')  # Length of item vector that will be indexed
+        for i, feature in enumerate(xp):
+            t.add_item(i, feature)
+        print("[INFO]Face features added to the Annoy object")
+
+        t.build(trees) # 10 trees
+        t.save(name)
+        print(f"[INFO] Time taken for index file generation : {str(time() - start)}")
+    except Exception as e:
+        print(f"[ERROR] generate_annoyIndex : {e}")
+
+   
+def load_index(name):
+    """
+    Loads annoy index from disk
+    name : name of the file
+    """
+    try:
+        index = AnnoyIndex(128, 'euclidean')
+        index.load(name)
+        return index
+    except Exception as e:
+        print(f"[ERROR] load_index : {e}")
+        
+    return None
+    
+    
+def search(query, index, neighbours=3):
+    """
+    Returns nearest neighbours of the query vector
+    query : (128,) dimensional vector
+    index : annoy index object
+    neighbours : number of nearest neighbours
+    """
+    
+    return index.get_nns_by_vector(query, neighbours, include_distances=True)
+  
+
+def get_predictions(face_embeddings, annoy_index, labels, thresh=0.50):
+    """
+    Returns the predictions of the faces passed as parameter from annoy object
+    face_embeddings : face embeddings of multiple faces
+    annoy_index : annoy index object
+    labels : labels for the faces
+    thresh : Distance threshold for comparision between faces (less threshold means strict criteria)
+    """
+    predictions = []
+    
+    for ix, face_emb in enumerate(face_embeddings):
+        out = search(face_emb, annoy_index)
+        name_count = [labels[ind] for ind in out[0]]
+        name_count = name_count.count(name_count[0])
+        if name_count >= 3:
+            index = out[0][0]
+            dist = out[1][0]
+            
+            if dist <= thresh:
+                name = labels[index]
+                predictions.append((name, dist))
+                continue
+            
+        predictions.append(("Unknown", 0.0))
+    return predictions
+
+    
 def draw_predictions(img,cords, predictions):
     """
     Draws predictions on images
@@ -78,9 +170,8 @@ def draw_predictions(img,cords, predictions):
     font = cv2.FONT_HERSHEY_COMPLEX
     font_scale = 1.5
     
-    for key in predictions.keys():
-        (x,y,w,h) = cords[key]
-        text = f"{predictions[key]:.4f}"
+    for (x,y,w,h),(name, dist) in zip(cords, predictions):
+        text = f"{name} : {dist:.4f}"
         cv2.rectangle(img_cp, (x,y), (x+w, y+h), (0,0,255), int(0.01*img_cp.shape[0]))
         (tw, th) = cv2.getTextSize(text, font, font_scale, thickness=5)[0]
         cv2.rectangle(img_cp, (x,y-th), (x+tw, y), (0,0,0), -1)
@@ -95,71 +186,3 @@ def reduce_glare(image):
     out = clahe.apply(gray)
     image = cv2.cvtColor(out, cv2.COLOR_GRAY2BGR)
     return image
-
-
-def getNumberOfCameras():
-    index = 0
-    arr = []
-    while True:
-        cap = cv2.VideoCapture(index)
-        if not cap.read()[0]:
-            break
-        else:
-            arr.append(index)
-        cap.release()
-        index += 1
-    return arr
-
-
-def getDistance(n1, n2):
-    return np.linalg.norm(n1-n2)
-
-
-# def getPrediction(source, face_embeddings, threshold = 0.6):
-#     predictions = {}
-#     for ix, embedding in enumerate(face_embeddings):
-#         dist = getDistance(source, embedding)
-#         if dist <= threshold:
-#             predictions[ix] = dist
-#     return predictions
-
-def getPrediction(sources, face_embeddings, threshold = 0.6):
-    distances = {}
-    predictions = {}
-
-    for ix, embedding in enumerate(face_embeddings):
-        distances[ix] = []
-        for source in sources:
-            dist = getDistance(source, embedding)
-            distances[ix].append(dist)
-    
-    min_dist = [min(distances[key]) for key in distances.keys()]
-    ind, val = np.argmin(min_dist), np.min(min_dist)
-
-    count = 0
-    for dist in distances[ind]:
-        if dist <= threshold:
-            count += 1
-
-    probability = count / len(sources)
-    
-    if probability > 0.0:
-        predictions[0] = probability
-
-    return predictions
-
-
-def convertMilSeconds(n): 
-    return str(datetime.timedelta(milliseconds = n))
-
-
-def writeVideo(name,frames, FPS):
-    h,w = frames[0].shape[0:2]
-    fourcc = cv2.VideoWriter_fourcc(*'DIVX') 
-    video=cv2.VideoWriter(name, fourcc, FPS,(w,h))
-
-    for frame in frames:
-        video.write(frame)
-
-    video.release()
-    print(f"[INFO] {name} Generated...")

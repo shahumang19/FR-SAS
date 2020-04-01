@@ -4,8 +4,9 @@ import utils as u
 import os, shutil
 
 BASE_DIR = "faces"
-DATA_DIR = "models"
+DATA_DIR = "data"
 EMBEDDINGS_FILE = os.path.join(DATA_DIR, "embeddings.pkl")
+DISTANCE_FILE = os.path.join(DATA_DIR, "distance.euc")
 
 
 users = os.listdir(BASE_DIR)
@@ -38,6 +39,7 @@ try:
         embeddings = facenet.get_embeddings(images, verbose=1)
         
         if embeddings is not None:
+            data = None
             if os.path.exists(EMBEDDINGS_FILE):
                 data = u.read_data(EMBEDDINGS_FILE)
                 data["embeddings"] = np.append(data["embeddings"], embeddings, axis=0)
@@ -46,6 +48,7 @@ try:
             else:
                 data = {"embeddings":embeddings, "labels":labels}
                 u.write_data(data, EMBEDDINGS_FILE)
+            u.generate_annoyIndex(data["embeddings"], name=DISTANCE_FILE, trees=20)
     else:
         print(f"[ERROR] [embeddings.py] No images found in {BASE_DIR}...")
 

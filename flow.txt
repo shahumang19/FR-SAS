@@ -1,0 +1,5 @@
+1) Research on the recognizing faces from different angles
+2) Add face functionality
+3) Detection on multiple camera
+4) Adding time stamp functionality
+5) Integration with sql for attendance marking
