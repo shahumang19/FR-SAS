@@ -4,7 +4,7 @@ import utils as u
 import os, shutil
 import cv2, numpy as np
 
-BASE_DIR = "data"
+BASE_DIR = "original"
 OUTPUT_DIR = "faces"
 BACKUP_DIR = "backup"
 

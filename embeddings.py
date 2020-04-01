@@ -31,7 +31,7 @@ try:
                     labels.append(user)
                 else:
                     print(f"[ERROR] [embeddings.py] {source_file} not an image...")
-            # shutil.rmtree(source)
+            shutil.rmtree(source)
         else:
             print(f"[WARNING] [embeddings.py] {user} has no images...")
 
