@@ -120,8 +120,8 @@ def augmentImage(img):
     # images.append(gaussian_noise(cp, sigma=0.1))
 
     # Dark and Bright Images
-    images.append(brightness(cp, scale=0.3))
-    images.append(brightness(cp, scale=1.50))
+    images.append(brightness(cp, scale=0.4))
+    images.append(brightness(cp, scale=1.25))
 
     return images
 
