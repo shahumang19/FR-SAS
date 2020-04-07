@@ -33,7 +33,8 @@ facenet = Facenet()
 
 count_frames, skip_frames = 0, 15
 # cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-cap = cv2.VideoCapture("temp\\1.MOV")
+cap = cv2.VideoCapture("temp\\3.mp4")
+frames_list = []#########################
 
 try:
     while True:
@@ -57,13 +58,15 @@ try:
                 frame = u.draw_predictions(frame, face_locations, predictions)
 
             frame = imutils.resize(frame, width=min(1024, frame.shape[1]))
-            cv2.imshow("Live Face Detection", frame)
+            frames_list.append(frame) #########################
+            # cv2.imshow("Live Face Detection", frame)
             count_frames += skip_frames # i.e. at 30 fps, this advances one second
             cap.set(1, count_frames)
             if cv2.waitKey(1) == 13:
                 break
         else:
             print("[INFO] [recognize.py] Video frame not available...")
+            u.writeVideo("data\\3.mp4", frames_list, 4)
             break
 except Exception as e:
     print(f"[ERROR] [recognize.py] : {e}")

@@ -186,3 +186,14 @@ def reduce_glare(image):
     out = clahe.apply(gray)
     image = cv2.cvtColor(out, cv2.COLOR_GRAY2BGR)
     return image
+
+def writeVideo(name,frames, FPS):
+    h,w = frames[0].shape[0:2]
+    fourcc = cv2.VideoWriter_fourcc(*'DIVX') 
+    video=cv2.VideoWriter(name, fourcc, FPS,(w,h))
+
+    for frame in frames:
+        video.write(frame)
+
+    video.release()
+    print(f"[INFO] {name} Generated...")

@@ -8,3 +8,8 @@
 - Notes : 
 1) Add data with specs and without specs
 2) Test data with multiple angles
+
+
+- Camera Placement
+1) If camera is placed on the center part of the class then 
+    it would be easier to identify the student.
