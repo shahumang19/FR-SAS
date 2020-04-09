@@ -6,6 +6,18 @@ from annoy import AnnoyIndex
 from time import time
 
 
+def read_txtfile(name):
+    """
+    Reads text files from given path
+    """
+    try:
+        with open(name, "r") as fi:
+            data = fi.readlines()
+            return data
+    except Exception as e:
+        print(f"[ERROR] write_data : {e}")
+
+
 def write_data(data,name):
     """
     Writes data to pickle file.
