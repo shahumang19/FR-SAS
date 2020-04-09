@@ -3,10 +3,12 @@ import cv2
 
 
 class VideoStream:
-    def __init__(self, src=0):
+    def __init__(self, src=0, skip_frames=15):
         # initialize the video camera stream and read the first frame
         # from the stream
         self.stream = cv2.VideoCapture(src)
+        self.count_frames = 1
+        self.skip_frames = skip_frames
         (self.grabbed, self.frame) = self.stream.read()
         # initialize the variable used to indicate if the thread should
         # be stopped
@@ -24,7 +26,10 @@ class VideoStream:
             if self.stopped or not self.grabbed:
                 return
             # otherwise, read the next frame from the stream
+            self.count_frames += self.skip_frames
+            self.stream.set(1, self.count_frames)
             (self.grabbed, self.frame) = self.stream.read()
+
 
     def read(self):
         # return the frame most recently read
