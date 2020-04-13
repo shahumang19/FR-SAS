@@ -12,20 +12,20 @@ SKIP_FRAMES = 15
 DATA_DIR = "data"
 DISTANCE_FILE = os.path.join(DATA_DIR, "distance.euc")
 LABELS_FILE = os.path.join(DATA_DIR, "embeddings.pkl")
+CAM_FILE = os.path.join(DATA_DIR, "vidconfig.txt")
 CONFIG_FILE = os.path.join(DATA_DIR, "config.txt")
 
 
-if not os.path.exists(DISTANCE_FILE):
-    print("[ERROR] [recognize_multi.py] No User exists. Add a user...")
-    exit(1)
+def file_check(path, message):
+    if not os.path.exists(path):
+        print(f"[ERROR] [recognize_multi.py] {message}")
+        exit(1)
 
-if not os.path.exists(LABELS_FILE):
-    print("[ERROR] [recognize_multi.py] User names not found...")
-    exit(1)
 
-if not os.path.exists(CONFIG_FILE):
-    print("[ERROR] [recognize_multi.py] config file not found...")
-    exit(1)
+file_check(DISTANCE_FILE, "No User exists. Add a user...")
+file_check(LABELS_FILE, "User names not found...")
+file_check(CAM_FILE, "Cam file not found...")
+file_check(CONFIG_FILE, "Config file not found...")
 
 
 annoy_object = u.load_index(DISTANCE_FILE)
@@ -34,8 +34,8 @@ print("[INFO] [recognize_multi.py] Distance file loaded...")
 labels = u.read_data(LABELS_FILE)["labels"]
 print("[INFO] [recognize_multi.py] Labels file loaded...")
 
-cam_links = u.read_txtfile(CONFIG_FILE)
-print("[INFO] [recognize_multi.py] configs file loaded...")
+cam_links = u.read_txtfile(CAM_FILE)
+print("[INFO] [recognize_multi.py] cam file loaded...")
 
 detector = FaceDetectionSSD()
 facenet = Facenet()
@@ -44,7 +44,12 @@ facenet = Facenet()
 cams = [FileVideoStream(path=link, skip_frames=SKIP_FRAMES).start() for link in cam_links]
 # cams = [WebcamVideoStream(src=link, skip_frames=SKIP_FRAMES).start() for link in cam_links]
 logs = {ix:[] for ix in range(len(cams))}
-print(f"[INFO] [recognize_multi.py] Num of Cameras detected : {len(cams)}")
+
+if len(cams) > 0:
+    print(f"[INFO] [recognize_multi.py] Num of Cameras detected : {len(cams)}")
+else:
+    print(f"[ERROR] [recognize_multi.py] No cameras found...")
+    exit(1)
 
 # cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 # cap = cv2.VideoCapture("temp\\3.mp4")
