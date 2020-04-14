@@ -1,10 +1,12 @@
 from FaceDetectionSSD import FaceDetectionSSD
 from Facenet import Facenet
 from ThreadedStreaming import WebcamVideoStream, FileVideoStream
+from threading import Thread
 import utils as u
 import cv2, numpy as np
 import os
 import imutils
+import keyboard
 
 SOURCE_CAM = 0
 DEFAULT_THRESH = 0.75
@@ -14,6 +16,18 @@ DISTANCE_FILE = os.path.join(DATA_DIR, "distance.euc")
 LABELS_FILE = os.path.join(DATA_DIR, "embeddings.pkl")
 CAM_FILE = os.path.join(DATA_DIR, "vidconfig.txt")
 CONFIG_FILE = os.path.join(DATA_DIR, "config.txt")
+
+
+
+#Initializing exit Thread
+def exit_check(cams):
+    global infinite # Loop variable
+    input()
+    for ix, cam in enumerate([cams]):
+        cam.stop()
+    infinite = False
+    print("[INFO] [recognize_multi.py] Processing stopped by user...")
+    # exit(0)
 
 
 def file_check(path, message):
@@ -37,12 +51,17 @@ print("[INFO] [recognize_multi.py] Labels file loaded...")
 cam_links = u.read_txtfile(CAM_FILE)
 print("[INFO] [recognize_multi.py] cam file loaded...")
 
+configs = eval(u.read_txtfile(CONFIG_FILE)[0])
+print("[INFO] [recognize_multi.py] cam file loaded...")
+
 detector = FaceDetectionSSD()
 facenet = Facenet()
 
 
-cams = [FileVideoStream(path=link, skip_frames=SKIP_FRAMES).start() for link in cam_links]
-# cams = [WebcamVideoStream(src=link, skip_frames=SKIP_FRAMES).start() for link in cam_links]
+# cams = [FileVideoStream(path=link, skip_frames=SKIP_FRAMES).start() for link in cam_links]
+cams = [
+    WebcamVideoStream(src=eval(link), skip_frames=SKIP_FRAMES, time_stamp=configs["time_stamp"]).start() for link in cam_links
+    ]
 logs = {ix:[] for ix in range(len(cams))}
 
 if len(cams) > 0:
@@ -51,17 +70,27 @@ else:
     print(f"[ERROR] [recognize_multi.py] No cameras found...")
     exit(1)
 
+if "time_stamp" in configs.keys():
+    time_stamp = configs["time_stamp"]
+    print(f"[INFO] [recognize_multi.py] Taking time stamp as {time_stamp} minutes...")
+else:
+    time_stamp = 10
+    print("[INFO] [recognize_multi.py] Taking Default time stamp as 10 minutes...")
+
 # cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 # cap = cv2.VideoCapture("temp\\3.mp4")
 # frames_list = []#########################
+
+Thread(target=exit_check, args=(cams), name='key_capture_thread', daemon=True).start()
+
 
 try:
     infinite = True
     while infinite:
         camlinks_closed_count = 0
-        print(infinite)
+        # print(infinite)
         for ix, cam in enumerate(cams):
-            print(ix)
+            # print(ix)
             
             # if cam.grabbed:
             if cam.more():
@@ -91,15 +120,20 @@ try:
                     for cam in cams:
                         cam.stop()
                     infinite = False
+
+
             else:
-                print(f"[INFO] [recognize_multi.py] Video frame not available : cam-index {ix} -- {cam_links[ix]}")
+                pass
+                # print(f"[INFO] [recognize_multi.py] Video frame not available : cam-index {ix} -- {cam_links[ix]}")
                 # cam.stop()
-                camlinks_closed_count += 1
-                if camlinks_closed_count == len(cams):
-                    for cam in cams:
-                        cam.stop()
-                    infinite = False
+                # camlinks_closed_count += 1
+                # if camlinks_closed_count == len(cams):
+                #     for cam in cams:
+                #         cam.stop()
+                #     infinite = False
                 # u.writeVideo("data\\3.mp4", frames_list, 4)##################################
+            
+        
     
 except Exception as e:
     print(f"[ERROR] [recognize_multi.py] : {e}")
