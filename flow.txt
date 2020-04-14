@@ -13,3 +13,70 @@
 - Camera Placement
 1) If camera is placed on the center part of the class then 
     it would be easier to identify the student.
+
+- MySQL DB : 
+    * Class : 
+        = CID - int
+        = CNAME - str
+    * Student DB : 
+        = SID - int(auto)
+        = SREGNO - str
+        = SNAME - str
+        = SCLASS (Cid - *Class)
+    * Slots : 
+        = SLTID : int
+        = STIME : time
+        = ETIME : time
+    * Attendance :
+        = SID - int (SID - *Student)
+        = SLTID - int (SLTID - *Slots)
+        = ADATE - date
+        = ATIME - time
+        %= Distance - float32
+
+-------------------------------------------------
+
+
+    * Class : 
+        = CID - int
+        = CNAME - str
+    * Faculty : 
+        = FID - int
+        = FNAME - str
+    * Subject :
+        = SUBID - int
+        = SUBNAME - str
+    * Faculty-Subject-Bridge :
+        = FSBID - int(auto)
+        = FID (FID - *Faculty)
+        = SUBID (SUBID - *Subject)
+    * Student : 
+        = SID - int(auto)
+        = SREGNO - str
+        = SNAME - str
+        = SCLASS (Cid - *Class)
+    * Attendance :
+        = SID - (SID - *Student)
+        = FSBID - (FSBID - *Faculty-Subject-Bridge)
+        = TIME - datetime
+        = Distance - float32
+    * Timetable :
+        = FSBID (FSBID - *Faculty-Subject-Bridge)
+        = WEEKDAY
+        = TIME
+
+    
+-------------------------------------------------------------
+
+    * Class : 
+        = CID - int
+        = CNAME - str
+    * Student DB : 
+        = SID - int(auto)
+        = SREGNO - str
+        = SNAME - str
+        = SCLASS (Cid - *Class)
+    * Attendance :
+        = SID - int
+        = TIME - datetime
+        = Distance - float32
