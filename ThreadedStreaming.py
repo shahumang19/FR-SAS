@@ -1,82 +1,34 @@
-# from threading import Thread
-# from datetime import datetime
-# from queue import Queue 
-# import cv2
-
-
-# class VideoStream:
-#     def __init__(self, src=0, skip_frames=15):
-#         # initialize the video camera stream and read the first frame
-#         # from the stream
-#         self.stream = cv2.VideoCapture(src)
-#         self.count_frames = 1
-#         self.skip_frames = skip_frames
-#         self.current_time = datetime.now()
-#         (self.grabbed, self.frame) = self.stream.read()
-#         self.queue = Queue(maxsize=60)
-#         if self.grabbed:
-#             self.queue.put((self.current_time, self.frame))
-#         # initialize the variable used to indicate if the thread should
-#         # be stopped
-#         self.stopped = False
-
-#     def start(self):
-#         # start the thread to read frames from the video stream
-#         Thread(target=self.update, args=()).start()
-#         return self
-
-#     def update(self):
-#         # keep looping infinitely until the thread is stopped
-#         while True:
-#             # if the thread indicator variable is set, stop the thread
-#             if self.stopped:
-#                 return
-#             # otherwise, read the next frame from the stream
-#             self.count_frames += self.skip_frames
-#             self.stream.set(1, self.count_frames)
-#             self.current_time = datetime.now()
-#             (self.grabbed, self.frame) = self.stream.read()
-#             if self.grabbed:
-#                 self.queue.put((self.current_time, self.frame))
-
-
-#     def read(self):
-#         # return the frame most recently read
-#         if not self.queue.empty():
-#             return self.queue.get()
-
-#     def stop(self):
-#         # indicate that the thread should be stopped
-#         self.stopped = True
-
-
-
 from threading import Thread
 from queue import Queue
 from datetime import datetime
 import time
 import cv2
 
+
 class WebcamVideoStream:
-    def __init__(self, src=0, name="WebcamVideoStream", skip_frames=15):
+    def __init__(self, src=0, skip_frames=15, time_stamp=10, queue_threshold=20):
         # initialize the video camera stream and read the first frame
         # from the stream
         self.stream = cv2.VideoCapture(src)
+        self.time_stamp = time_stamp
         self.count_frames = 1
         self.skip_frames = skip_frames
         self.current_time = datetime.now()
         (self.grabbed, self.frame) = self.stream.read()
-        # initialize the thread name
-        self.name = name
-
+        self.queue = Queue(maxsize=128)
+        self.queue_counter = 1
+        self.queue_threshold = queue_threshold
+        if self.grabbed:
+            self.queue.put((self.current_time, self.frame))
         # initialize the variable used to indicate if the thread should
         # be stopped
         self.stopped = False
 
     def start(self):
         # start the thread to read frames from the video stream
-        t = Thread(target=self.update, name=self.name, args=())
+        t = Thread(target=self.update, args=())
         t.daemon = True
+        self.start_time = time.time()
         t.start()
         return self
 
@@ -87,20 +39,89 @@ class WebcamVideoStream:
             if self.stopped:
                 return
 
-            self.count_frames += self.skip_frames
-            self.stream.set(1, self.count_frames)
+            minutes = int(((time.time() - self.start_time) % 3600) // 60)
+            # print(minutes, self.time_stamp)
+            if minutes >= self.time_stamp:
+                self.queue_counter = 0
+                self.start_time = time.time()
 
-            # otherwise, read the next frame from the stream
-            self.current_time = datetime.now()
-            (self.grabbed, self.frame) = self.stream.read()
+            if (minutes >= self.time_stamp) or (self.queue_counter <= self.queue_threshold):
+                # otherwise, read the next frame from the stream
+                self.count_frames += self.skip_frames
+                self.stream.set(1, self.count_frames)
+                self.current_time = datetime.now()
+                (self.grabbed, self.frame) = self.stream.read()
+                if self.grabbed:
+                    # print(f"{self.queue_counter}")
+                    self.queue_counter += 1
+                    self.queue.put((self.current_time, self.frame))
+
 
     def read(self):
         # return the frame most recently read
-        return self.current_time, self.frame
+        if not self.queue.empty():
+            return self.queue.get()
+
+    def more(self):
+        # return True if there are still frames in the queue. If stream is not stopped, try to wait a moment
+        # tries = 0
+        # while self.queue.qsize() == 0 and not self.stopped and tries < 5:
+        #     time.sleep(0.01)
+        #     tries += 1
+
+        return self.queue.qsize() > 0
 
     def stop(self):
         # indicate that the thread should be stopped
         self.stopped = True
+
+
+
+
+# class WebcamVideoStream:
+#     def __init__(self, src=0, name="WebcamVideoStream", skip_frames=15):
+#         # initialize the video camera stream and read the first frame
+#         # from the stream
+#         self.stream = cv2.VideoCapture(src)
+#         self.count_frames = 1
+#         self.skip_frames = skip_frames
+#         self.current_time = datetime.now()
+#         (self.grabbed, self.frame) = self.stream.read()
+#         # initialize the thread name
+#         self.name = name
+
+#         # initialize the variable used to indicate if the thread should
+#         # be stopped
+#         self.stopped = False
+
+#     def start(self):
+#         # start the thread to read frames from the video stream
+#         t = Thread(target=self.update, name=self.name, args=())
+#         t.daemon = True
+#         t.start()
+#         return self
+
+#     def update(self):
+#         # keep looping infinitely until the thread is stopped
+#         while True:
+#             # if the thread indicator variable is set, stop the thread
+#             if self.stopped:
+#                 return
+
+#             self.count_frames += self.skip_frames
+#             self.stream.set(1, self.count_frames)
+
+#             # otherwise, read the next frame from the stream
+#             self.current_time = datetime.now()
+#             (self.grabbed, self.frame) = self.stream.read()
+
+#     def read(self):
+#         # return the frame most recently read
+#         return self.current_time, self.frame
+
+#     def stop(self):
+#         # indicate that the thread should be stopped
+#         self.stopped = True
 
 
 
@@ -199,13 +220,15 @@ class FileVideoStream:
 if __name__ == "__main__":
     from imutils import resize
 
-    vs1 = FileVideoStream("temp\\1.MOV").start()
-    vs2 = FileVideoStream("temp\\2.mp4").start()
-    vs3 = FileVideoStream("temp\\3.mp4").start()
+    # vs1 = FileVideoStream("temp\\1.MOV").start()
+    # vs2 = FileVideoStream("temp\\2.mp4").start()
+    # vs3 = FileVideoStream("temp\\3.mp4").start()
+    # vss = (vs1,vs2,vs3)
+    vss = [WebcamVideoStream(time_stamp=1).start()]
 
     while True:
         count = 0
-        for ix, vs in enumerate((vs1,vs2,vs3), start=1):
+        for ix, vs in enumerate(vss, start=1):
             if vs.more():
                 ftime, frame = vs.read()
                 print(f"{ix} -- {ftime}")
@@ -216,11 +239,13 @@ if __name__ == "__main__":
                     count += 1
                     vs.stop()
             else:
-                print(f"{ix} - No frame found")
+                pass
+                # print(f"{ix} - No frame found")
             
         if cv2.waitKey(1) == 13 or count == 3:
-            for vs in (vs1,vs2,vs3):
+            for vs in vss:
                 vs.stop()
             break
+
 
     cv2.destroyAllWindows()
