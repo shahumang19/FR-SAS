@@ -1,9 +1,30 @@
 1) Research on the recognizing faces from different angles
+
 2) Add face functionality
+
 3) Detection on multiple camera
+
 4) Adding time stamp functionality
+
 5) Integration with sql for attendance marking
-6) Add delete user functionality
+    - Create a class
+    - Add Database and table creation queries
+    - Add, Update, Delete Class queries
+    - Add, Update, Delete User Query
+    - Add and fetch attendance queries
+    - Add and fetch ClassAttendance queries
+
+6) Add delete user functionality and Deactivate user functionality
+    - Delete user from student table (delete all the records from attendance and everywhere)
+    - Remove his data from embeddings.pkl
+    - Regenerate distance.euc file
+
+7) Add deactivate user functionality
+    - Deactivate user from student table
+    - Remove his data from embeddings.pkl
+    - Regenerate distance.euc file
+
+---------------------------------------------------------------------------
 
 - Notes : 
 1) Add data with specs and without specs
@@ -14,11 +35,40 @@
 1) If camera is placed on the center part of the class then 
     it would be easier to identify the student.
 
+
+-------------------------------------------------------------------------------
+
 - MySQL DB : 
     * Class : 
         = CID - int
         = CNAME - str
-    * Student DB : 
+    * Student : 
+        = SID - int(auto)
+        = SREGNO - str
+        = SNAME - str
+        = SCLASS (Cid - *Class)
+        = ACTIVE - bool
+    * ClassAttendance :
+        = CID (Cid - *Class)
+        = ADATE - date
+        = ATIME - time
+        = SACTIVE - int
+        = SPRESENT - int
+        = SRECOG - int
+        = SABSCENT - int
+    * Attendance :
+        = SID - int (SID - *Student)
+        = ADATE - date
+        = ATIME - time
+        %= Distance - float32
+
+-------------------------------------------------
+
+
+    * Class : 
+        = CID - int
+        = CNAME - str
+    * Student : 
         = SID - int(auto)
         = SREGNO - str
         = SNAME - str
