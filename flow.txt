@@ -24,6 +24,8 @@
     - Remove his data from embeddings.pkl
     - Regenerate distance.euc file
 
+8) 2) Add class functionality
+
 ---------------------------------------------------------------------------
 
 - Notes : 
@@ -40,7 +42,7 @@
 
 - MySQL DB : 
     * Class : 
-        = CID - int
+        = CID - int(auto)
         = CNAME - str
     * Student : 
         = SID - int(auto)
@@ -130,3 +132,4 @@
         = SID - int
         = TIME - datetime
         = Distance - float32
+
