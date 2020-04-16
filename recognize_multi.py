@@ -23,7 +23,7 @@ CONFIG_FILE = os.path.join(DATA_DIR, "config.txt")
 def exit_check(cams):
     global infinite # Loop variable
     input()
-    for ix, cam in enumerate([cams]):
+    for ix, cam in enumerate(cams):
         cam.stop()
     infinite = False
     print("[INFO] [recognize_multi.py] Processing stopped by user...")
@@ -81,7 +81,7 @@ else:
 # cap = cv2.VideoCapture("temp\\3.mp4")
 # frames_list = []#########################
 
-Thread(target=exit_check, args=(cams), name='key_capture_thread', daemon=True).start()
+Thread(target=exit_check, args=(cams,), name='key_capture_thread', daemon=True).start()
 
 
 try:
@@ -106,6 +106,8 @@ try:
                         for pred in predictions:
                             if pred[0] != "Unknown":
                                 log = f"cam-{ix} -- {frame_time} -- {pred[0]} - {pred[1]}\n"
+                                day = frame_time.date().strftime("%d/%m/%Y")
+                                tm = frame_time.time().strftime("%H:%M:%S")
                                 logs[ix].append(log)
                                 print(log, end="")
                     
