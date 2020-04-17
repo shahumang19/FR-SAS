@@ -24,7 +24,9 @@
     - Remove his data from embeddings.pkl
     - Regenerate distance.euc file
 
-8) 2) Add class functionality
+8) Add class functionality
+
+9) Generate wireframes for GUI
 
 ---------------------------------------------------------------------------
 
