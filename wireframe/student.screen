@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" x="10" y="10" width="1143" height="799" text="Browser&#xA;http://..." measuredWidth="1143" measuredHeight="799">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="2" x="20" y="72" text="HOME" measuredWidth="38" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SearchField" id="3" x="176" y="78" width="801" text="Search Student" measuredWidth="801" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="4" x="1003" y="72" width="113" height="35" text="SEARCH" measuredWidth="113" measuredHeight="35">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="5" x="39" y="142" width="149" text="ID" measuredWidth="149" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="6" x="120" y="153" width="241" text="Text field" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="7" x="794" y="139" width="149" text="NAME" measuredWidth="149" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="8" x="875" y="150" width="241" text="Text field" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="9" x="36" y="209" width="149" text="CLASS" measuredWidth="149" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="10" x="120" y="217" width="241" text="10-A" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="11" x="791" y="209" width="149" text="STATUS" measuredWidth="149" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="12" x="875" y="217" width="241" text="Active" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="13" x="340" y="287" width="465" height="333" text="VIDEO RECORDER" measuredWidth="465" measuredHeight="333"/>
+  <widgets xsi:type="model:Image" id="14" x="37" y="287" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="15" x="208" y="287" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="16" x="37" y="400" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="17" x="208" y="400" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="18" x="37" y="520" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="19" x="208" y="520" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="20" x="845" y="287" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="21" x="1016" y="287" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="22" x="845" y="400" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="23" x="1016" y="400" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="24" x="845" y="520" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Image" id="25" x="1016" y="520" text="IMG" measuredWidth="100" measuredHeight="100"/>
+  <widgets xsi:type="model:Button" id="26" x="340" y="656" width="146" height="42" text="START" measuredWidth="146" measuredHeight="42">
+    <font size="14px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="27" x="504" y="656" width="146" height="42" text="CAPTURE" measuredWidth="146" measuredHeight="42">
+    <font size="14px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="28" x="659" y="656" width="146" height="42" text="STOP" measuredWidth="146" measuredHeight="42">
+    <font size="14px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="29" x="39" y="736" width="271" height="57" text="ADD" measuredWidth="271" measuredHeight="57">
+    <font size="14px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="30" x="446" y="736" width="271" height="57" text="UPDATE" measuredWidth="271" measuredHeight="57">
+    <font size="14px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="31" x="845" y="736" width="271" height="57" text="DELETE" measuredWidth="271" measuredHeight="57">
+    <font size="14px" bold="true"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

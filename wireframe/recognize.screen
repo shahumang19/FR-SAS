@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" x="10" y="10" width="1143" height="799" text="Browser&#xA;http://..." measuredWidth="1143" measuredHeight="799">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="2" x="20" y="72" text="HOME" measuredWidth="38" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="3" x="108" y="165" width="945" text="Select Camera" measuredWidth="945" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="4" x="108" y="208" width="945" height="537" text="CAMERA FEED" measuredWidth="945" measuredHeight="537"/>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" x="10" y="10" width="1119" height="815" text="Browser&#xA;http://..." measuredWidth="1119" measuredHeight="815">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="2" x="455" y="201" width="178" height="72" text="User Management" measuredWidth="178" measuredHeight="72">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="3" x="455" y="312" width="178" height="72" text="View Recognition" measuredWidth="178" measuredHeight="72">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="4" x="455" y="537" width="178" height="72" text="Reports" measuredWidth="178" measuredHeight="72">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="6" x="455" y="649" width="178" height="72" text="Settings" measuredWidth="178" measuredHeight="72">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="7" x="455" y="424" width="178" height="72" text="View Attendance" measuredWidth="178" measuredHeight="72">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" x="10" y="10" width="1143" height="799" text="Browser&#xA;http://..." measuredWidth="1143" measuredHeight="799">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="2" x="20" y="72" text="HOME" measuredWidth="38" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:SearchField" id="3" x="112" y="280" width="801" text="Search Student" measuredWidth="801" measuredHeight="24">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="4" x="939" y="274" width="113" height="35" text="SEARCH" measuredWidth="113" measuredHeight="35">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="5" x="111" y="149" width="149" text="CLASS NAME" measuredWidth="149" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="6" x="288" y="156" width="625" text="10 - A" measuredWidth="625" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="7" x="939" y="150" width="113" height="35" text="ADD" measuredWidth="113" measuredHeight="35">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="8" x="120" y="352" width="937" height="385" text="ID, Name, Actions&#xA;1, 10 - A,[EDIT] [UPDATE]&#xA;2, 10 - B,[EDIT] [UPDATE]&#xA;3, 10 - C,[EDIT] [UPDATE]&#xA;4, 11 - A,[EDIT] [UPDATE]&#xA;5, 11 - B,[EDIT] [UPDATE]&#xA;6, 11 - C,[EDIT] [UPDATE]" measuredWidth="937" measuredHeight="385" alternative="#eee">
+    <font/>
+    <items x="419" y="24" width="24" height="15" text="EDIT"/>
+    <items x="446" y="24" width="44" height="15" text="UPDATE"/>
+    <items x="419" y="45" width="24" height="15" text="EDIT"/>
+    <items x="446" y="45" width="44" height="15" text="UPDATE"/>
+    <items x="419" y="66" width="24" height="15" text="EDIT"/>
+    <items x="446" y="66" width="44" height="15" text="UPDATE"/>
+    <items x="419" y="87" width="24" height="15" text="EDIT"/>
+    <items x="446" y="87" width="44" height="15" text="UPDATE"/>
+    <items x="419" y="108" width="24" height="15" text="EDIT"/>
+    <items x="446" y="108" width="44" height="15" text="UPDATE"/>
+    <items x="419" y="129" width="24" height="15" text="EDIT"/>
+    <items x="446" y="129" width="44" height="15" text="UPDATE"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" x="10" y="10" width="1143" height="799" text="Browser&#xA;http://..." measuredWidth="1143" measuredHeight="799">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="2" x="20" y="72" text="HOME" measuredWidth="38" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Table" id="3" x="53" y="312" width="1057" height="457" text="ID, NAME, DATE, TIME, STATUS&#xA;101, Ravi Shah, 12-12-19, 9:30, P&#xA;105, Bhavya Gandhi, 12-12-19, 9:30, A&#xA;" measuredWidth="1057" measuredHeight="457" alternative="#eee">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="4" x="917" y="144" width="193" text="Filter" measuredWidth="193" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="5" x="48" y="144" width="852" text="Search" measuredWidth="852" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="8" x="480" y="208" width="113" height="35" text="SEARCH" measuredWidth="113" measuredHeight="35">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

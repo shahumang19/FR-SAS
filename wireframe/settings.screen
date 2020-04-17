@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" x="10" y="10" width="1143" height="799" text="Browser&#xA;http://..." measuredWidth="1143" measuredHeight="799">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="2" x="20" y="72" text="HOME" measuredWidth="38" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="3" x="360" y="144" width="149" text="TIMESTAMP" measuredWidth="149" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Combo" id="5" x="521" y="151" width="241" text="10 Minutes" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:HLine" id="6" x="32" y="208" width="1067" measuredWidth="1067" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" id="7" x="400" y="296" width="170" text="URL" measuredWidth="170" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="8" x="528" y="303" width="241" text="Text field" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="9" x="464" y="224" text="DATABASE SETTINGS" measuredWidth="222" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="10" x="400" y="345" width="170" text="USER" measuredWidth="170" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="11" x="528" y="352" width="241" text="Text field" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="12" x="400" y="391" width="162" text="PASSWORD" measuredWidth="162" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="13" x="528" y="398" width="241" text="Text field" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="14" x="400" y="448" width="162" text="DATABASE" measuredWidth="162" measuredHeight="38">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="15" x="528" y="455" width="241" text="Text field" measuredWidth="241" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="16" x="400" y="568" width="369" height="57" text="UPDATE" measuredWidth="369" measuredHeight="57">
+    <font size="22px" bold="true"/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

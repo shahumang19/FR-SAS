@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" x="10" y="10" width="1087" height="807" text="Browser&#xA;http://..." measuredWidth="1087" measuredHeight="807">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="3" x="457" y="205" width="178" height="72" text="Student Management" measuredWidth="178" measuredHeight="72">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="4" x="462" y="352" width="178" height="72" text="Class Management" measuredWidth="178" measuredHeight="72">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="6" x="47" y="96" text="HOME" measuredWidth="38" measuredHeight="58" textAlignment="Center" icon="image (large)" iconPosition="top">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
