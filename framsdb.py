@@ -92,6 +92,7 @@ class FRAMSDatabase:
             return -1
         except Exception as e:
             print(e)
+            return 0
     
     def updateClass(self, cid, cname):
         try:
@@ -162,11 +163,14 @@ class FRAMSDatabase:
         except Exception as e:
             print(e)
 
-    def viewStudent(self, sregno=None):
+    def viewStudent(self, sregno=None, active=None):
         try:
             if sregno:
                 query = 'SELECT * FROM student WHERE SREGNO=%s'
                 rows = self.db.query(query, (sregno,))
+            elif active:
+                query = 'SELECT * FROM student WHERE ACTIVE=%s'
+                rows = self.db.query(query, (active,))
             else:
                 query = 'SELECT * FROM student'
                 rows = self.db.query(query)
@@ -190,19 +194,19 @@ class FRAMSDatabase:
     def viewAttendance(self, sregno=None, adate=None, active=None):
         try:
             if sregno:
-                query = 'SELECT S.SREGNO,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE A.SID IN (SELECT SID FROM STUDENT WHERE  SREGNO=%s)'
+                query = 'SELECT S.SREGNO,S.SNAME,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE A.SID IN (SELECT SID FROM STUDENT WHERE  SREGNO=%s)'
                 rows = self.db.query(query, (sregno))
             elif adate and active:
-                query = 'SELECT S.SREGNO,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE A.SID IN (SELECT SID FROM STUDENT WHERE  ACTIVE=%s) AND ADATE = %s'
+                query = 'SELECT S.SREGNO,S.SNAME,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE A.SID IN (SELECT SID FROM STUDENT WHERE  ACTIVE=%s) AND ADATE = %s'
                 rows = self.db.query(query, (active, adate))
             elif adate:
-                query = 'SELECT S.SREGNO,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE ADATE = %s'
+                query = 'SELECT S.SREGNO,S.SNAME,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE ADATE = %s'
                 rows = self.db.query(query, (sregno,active))
             elif active:
-                query = 'SELECT S.SREGNO,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE A.SID IN (SELECT SID FROM STUDENT WHERE  ACTIVE=%s)'
+                query = 'SELECT S.SREGNO,S.SNAME,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID WHERE A.SID IN (SELECT SID FROM STUDENT WHERE  ACTIVE=%s)'
                 rows = self.db.query(query, (sregno,active))
             else:
-                query = 'SELECT S.SREGNO,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID'
+                query = 'SELECT S.SREGNO,S.SNAME,A.ADATE,A.ATIME  FROM attendance as A INNER JOIN student as S ON S.SID = A.SID'
                 rows = self.db.query(query)
             return rows
         except Exception as e:

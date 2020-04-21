@@ -1,7 +1,7 @@
 import cv2, numpy as np
 import pickle
 from os import listdir
-from os.path import isfile, isdir, join
+from os.path import isfile, isdir, join, exists
 from annoy import AnnoyIndex
 from time import time
 
@@ -209,5 +209,12 @@ def writeVideo(name,frames, FPS):
 
     video.release()
     print(f"[INFO] {name} Generated...")
+
+
+def file_check(path, filenm, message):
+    if not exists(path):
+        print(f"[ERROR] [{filenm}] {message}")
+        exit(1)
+
 
 cvtSecToMin = lambda seconds: int((seconds % 3600) // 60)

@@ -2,6 +2,7 @@ from FaceDetectionSSD import FaceDetectionSSD
 from Facenet import Facenet
 from ThreadedStreaming import WebcamVideoStream, FileVideoStream
 from threading import Thread
+from datetime import datetime
 import utils as u
 import cv2, numpy as np
 import os
@@ -16,6 +17,7 @@ DISTANCE_FILE = os.path.join(DATA_DIR, "distance.euc")
 LABELS_FILE = os.path.join(DATA_DIR, "embeddings.pkl")
 CAM_FILE = os.path.join(DATA_DIR, "vidconfig.txt")
 CONFIG_FILE = os.path.join(DATA_DIR, "config.txt")
+DB_TIMESTAMP = 10
 
 
 
@@ -23,23 +25,17 @@ CONFIG_FILE = os.path.join(DATA_DIR, "config.txt")
 def exit_check(cams):
     global infinite # Loop variable
     input()
-    for ix, cam in enumerate(cams):
+    for cam in cams:
         cam.stop()
     infinite = False
     print("[INFO] [recognize_multi.py] Processing stopped by user...")
     # exit(0)
 
 
-def file_check(path, message):
-    if not os.path.exists(path):
-        print(f"[ERROR] [recognize_multi.py] {message}")
-        exit(1)
-
-
-file_check(DISTANCE_FILE, "No User exists. Add a user...")
-file_check(LABELS_FILE, "User names not found...")
-file_check(CAM_FILE, "Cam file not found...")
-file_check(CONFIG_FILE, "Config file not found...")
+u.file_check(DISTANCE_FILE, "recognize_multi.py", "No User exists. Add a user...")
+u.file_check(LABELS_FILE, "recognize_multi.py", "User names not found...")
+u.file_check(CAM_FILE, "recognize_multi.py", "Cam file not found...")
+u.file_check(CONFIG_FILE, "recognize_multi.py", "Config file not found...")
 
 
 annoy_object = u.load_index(DISTANCE_FILE)
@@ -52,6 +48,7 @@ cam_links = u.read_txtfile(CAM_FILE)
 print("[INFO] [recognize_multi.py] cam file loaded...")
 
 configs = eval(u.read_txtfile(CONFIG_FILE)[0])
+TIMESTAMP = configs["time_stamp"]
 print("[INFO] [recognize_multi.py] cam file loaded...")
 
 detector = FaceDetectionSSD()
@@ -60,9 +57,10 @@ facenet = Facenet()
 
 # cams = [FileVideoStream(path=link, skip_frames=SKIP_FRAMES).start() for link in cam_links]
 cams = [
-    WebcamVideoStream(src=eval(link), skip_frames=SKIP_FRAMES, time_stamp=configs["time_stamp"]).start() for link in cam_links
+    WebcamVideoStream(src=eval(link), skip_frames=SKIP_FRAMES, time_stamp=TIMESTAMP).start() for link in cam_links
     ]
-logs = {ix:[] for ix in range(len(cams))}
+# logs = {ix:[] for ix in range(len(cams))}
+logs = {}
 
 if len(cams) > 0:
     print(f"[INFO] [recognize_multi.py] Num of Cameras detected : {len(cams)}")
@@ -104,18 +102,27 @@ try:
                         predictions = u.get_predictions(embeddings, annoy_object, labels, DEFAULT_THRESH)
                     
                         for pred in predictions:
-                            if pred[0] != "Unknown":
-                                log = f"cam-{ix} -- {frame_time} -- {pred[0]} - {pred[1]}\n"
-                                day = frame_time.date().strftime("%d/%m/%Y")
-                                tm = frame_time.time().strftime("%H:%M:%S")
-                                logs[ix].append(log)
-                                print(log, end="")
+                            stuID = pred[0]
+                            dist = pred[1]
+                            if stuID != "Unknown":
+                                log = f"{frame_time} -- {stuID} - {dist}"
+                                print(log)
+                                # day = frame_time.date().strftime("%d/%m/%Y")
+                                # tm = frame_time.time().strftime("%H:%M:%S")
+                                if stuID not in logs.keys():
+                                    logs[stuID] = [{"dt":frame_time, "dist":dist}]
+                                else:
+                                    lastLog = logs[stuID][-1]
+                                    minutes = int((frame_time - lastLog["dt"]).total_seconds()//60)
+                                    print(minutes, (frame_time - lastLog["dt"]).total_seconds()//60)
+                                    if minutes >= TIMESTAMP : 
+                                        logs[stuID].append({"dt":frame_time, "dist":dist})
                     
                         frame = u.draw_predictions(frame, face_locations, predictions)
 
                 # frame = imutils.resize(frame, width=min(480, frame.shape[1]))
                 # frames_list.append(frame) #########################
-                # cv2.imshow(f"{ix}", frame)
+                cv2.imshow(f"{ix}", frame)
 
                 if cv2.waitKey(1) == 13 or camlinks_closed_count == len(cams):
                     print("[INFO] [recognize_multi.py] Processing stopped by user...")
@@ -142,7 +149,6 @@ except Exception as e:
 finally:
     cv2.destroyAllWindows()
 
-    # Printing Logs of different cameras
-    for key in logs.keys():
-        for log in logs[key]:
-            print(log, end="")
+# Printing Logs of different cameras
+for key in logs.keys():
+    print(key,logs[key])
