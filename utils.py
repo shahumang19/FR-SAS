@@ -209,3 +209,5 @@ def writeVideo(name,frames, FPS):
 
     video.release()
     print(f"[INFO] {name} Generated...")
+
+cvtSecToMin = lambda seconds: int((seconds % 3600) // 60)

@@ -1,6 +1,7 @@
 from threading import Thread
 from queue import Queue
 from datetime import datetime
+from utils import cvtSecToMin
 import time
 import cv2
 
@@ -39,7 +40,7 @@ class WebcamVideoStream:
             if self.stopped:
                 return
 
-            minutes = int(((time.time() - self.start_time) % 3600) // 60)
+            minutes = cvtSecToMin(time.time() - self.start_time)
             # print(minutes, self.time_stamp)
             if minutes >= self.time_stamp:
                 self.queue_counter = 0
