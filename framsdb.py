@@ -175,10 +175,10 @@ class FRAMSDatabase:
             print("Exception ocurred : ", e)
             return []
 
-    def addAttendance(self, sid, adate, atime, dist):
+    def addAttendance(self, sregno, adate, atime, dist):
         try:
-            query = 'INSERT INTO attendance(SID, ADATE, ATIME, DISTANCE) VALUES(%s, %s, %s, %s)'
-            self.db.execute(query, (sid, adate, atime, dist))
+            query = 'INSERT INTO attendance(SID, ADATE, ATIME, DISTANCE) VALUES((SELECT SID FROM STUDENT WHERE SREGNO=%s), %s, %s, %s)'
+            self.db.execute(query, (sregno, adate, atime, dist))
             self.db.commit()
             rc = 1 if self.db.rowcount() > 0 else 0
             return rc
