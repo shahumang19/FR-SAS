@@ -3,6 +3,8 @@ from Facenet import Facenet
 from ThreadedStreaming import WebcamVideoStream, FileVideoStream
 from threading import Thread
 from datetime import datetime
+from copy import deepcopy
+from framsdb import FRAMSDatabase
 import utils as u
 import cv2, numpy as np
 import os
@@ -20,7 +22,6 @@ CONFIG_FILE = os.path.join(DATA_DIR, "config.txt")
 DB_TIMESTAMP = 10
 
 
-
 #Initializing exit Thread
 def exit_check(cams):
     global infinite # Loop variable
@@ -30,6 +31,19 @@ def exit_check(cams):
     infinite = False
     print("[INFO] [recognize_multi.py] Processing stopped by user...")
     # exit(0)
+
+def mark_attendance(db, attendance_dict):
+    if len(attendance_dict.keys()) > 0:
+        values = []
+        for key in attendance_dict.keys():
+            for val in attendance_dict[key]:
+                dt = val["dt"].strftime("%Y/%m/%d")
+                tm = val["dt"].strftime("%H:%M:%S")
+                dist = val["dist"]
+                values.append((key, 1,dt, tm, dist))
+
+        rows = db.addAttendanceMulti(values)
+        print(f"{rows} inserted....")
 
 
 u.file_check(DISTANCE_FILE, "recognize_multi.py", "No User exists. Add a user...")
@@ -49,17 +63,19 @@ print("[INFO] [recognize_multi.py] cam file loaded...")
 
 configs = eval(u.read_txtfile(CONFIG_FILE)[0])
 TIMESTAMP = configs["time_stamp"]
+dbConfig = configs["db"]
+host, user, passwd, dbname = dbConfig["host"], dbConfig["user"], dbConfig["passwd"], dbConfig["db"]
 print("[INFO] [recognize_multi.py] cam file loaded...")
 
 detector = FaceDetectionSSD()
 facenet = Facenet()
+db = FRAMSDatabase(host, user, passwd, dbname)
 
 
 # cams = [FileVideoStream(path=link, skip_frames=SKIP_FRAMES).start() for link in cam_links]
 cams = [
     WebcamVideoStream(src=eval(link), skip_frames=SKIP_FRAMES, time_stamp=TIMESTAMP).start() for link in cam_links
     ]
-# logs = {ix:[] for ix in range(len(cams))}
 logs = {}
 
 if len(cams) > 0:
@@ -84,6 +100,7 @@ Thread(target=exit_check, args=(cams,), name='key_capture_thread', daemon=True).
 
 try:
     infinite = True
+    markAttStart = datetime.now()
     while infinite:
         camlinks_closed_count = 0
         # print(infinite)
@@ -114,7 +131,7 @@ try:
                                 else:
                                     lastLog = logs[stuID][-1]
                                     minutes = int((frame_time - lastLog["dt"]).total_seconds()//60)
-                                    print(minutes, (frame_time - lastLog["dt"]).total_seconds()//60)
+                                    
                                     if minutes >= TIMESTAMP : 
                                         logs[stuID].append({"dt":frame_time, "dist":dist})
                     
@@ -129,6 +146,15 @@ try:
                     for cam in cams:
                         cam.stop()
                     infinite = False
+
+                if int((datetime.now() - markAttStart).total_seconds()//60) >= DB_TIMESTAMP:
+                    logsCP = deepcopy(logs)
+                    # Thread(target=mark_attendance, args=(db, logsCP), name='key_capture_thread').start()
+                    mark_attendance(db, logsCP)
+                    markAttStart = datetime.now()
+                    logs = {}
+                
+
 
 
             else:
@@ -147,8 +173,11 @@ try:
 except Exception as e:
     print(f"[ERROR] [recognize_multi.py] : {e}")
 finally:
+    print("[INFO] [recognize_multi.py] Inside Finally Block...")
     cv2.destroyAllWindows()
-
-# Printing Logs of different cameras
-for key in logs.keys():
-    print(key,logs[key])
+    # Printing Logs of different cameras
+    for key in logs.keys():
+        print(key,logs[key])
+    
+    mark_attendance(db, logs)
+    db.close()
